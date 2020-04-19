@@ -1,10 +1,97 @@
 .pizza-card {
-  img {
-    max-width: 250px;
-  }
+    height: 560px;
+    width: 100%;
 
-  h3 {
-    color: @mainColor;
-    background-color: lighten(@mainColor, 45%);
-  }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    h3 {
+        color: #EA862E;
+        font-weight: 600;
+    }
+
+    .pizza-type {
+        color: #989898;
+        font-size: 15px;
+    }
+
+    .price {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .text-pizza {
+        height: 100px;
+    }
+
+    .primary {
+        width: 50%;
+        height: auto;
+        float: left;
+        text-align: center;
+        padding: 0px;
+        flex: 0 0 auto;
+    }
+
+    .default {
+        width: 50%;
+        height: auto;
+        float: left;
+        text-align: center;
+        padding: 0px;
+        flex: 0 0 auto;
+    }
+
+    .btn-default {
+        color: #fff;
+        background-color: #f0ad4e;
+        border-color: #eea236;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #f0ad4e;
+        border-color: #eea236;
+    }
+
+
+    @media (max-width: 1200px) {
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .text-pizza {
+            height: 150px;
+        }
+
+    }
+
+    @media (max-width: 992px) {
+        .price {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .text-pizza {
+            height: 100px;
+        }
+        height: 540px;
+    }
+
+
+    @media (max-width: 768px) {
+        .price {
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .text-pizza {
+            height: 50px;
+        }
+        height: 730px;
+    }
+
 }
