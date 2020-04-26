@@ -1,8 +1,8 @@
-/**
- * Created by chaika on 02.02.16.
- */
 var Templates = require('../Templates');
-
+var sumForAll = $("#sumForAll");
+var sumForOrder = $("#total-cost");
+var htmlAllQuantity = $("#allQuantity");
+var allQuantity = 0;
 //Перелік розмірів піци
 var PizzaSize = {
     Big: "big_size",
@@ -15,13 +15,20 @@ var Cart = [];
 //HTML едемент куди будуть додаватися піци
 var $cart = $("#cart");
 
-function addToCart(pizza, size) {
+function addToCart(pizza, size, price) {
     //Додавання однієї піци в кошик покупок
 
-    //Приклад реалізації, можна робити будь-яким іншим способом
+    for (var i = 0; i < Cart.length; i++)
+        if (Cart[i].pizza == pizza && Cart[i].size == size) {
+            Cart[i].quantity += 1;
+            updateCart();
+            return;
+        }
+
     Cart.push({
         pizza: pizza,
         size: size,
+        price: price,
         quantity: 1
     });
 
@@ -29,20 +36,27 @@ function addToCart(pizza, size) {
     updateCart();
 }
 
-function removeFromCart(cart_item) {
-    //Видалити піцу з кошика
-    //TODO: треба зробити
+$("#clear").click(function () {
+    Cart.length = 0;
+    updateCart();
+});
 
-    //Після видалення оновити відображення
+function removeFromCart(cart_item) {
+    for (var i = 0; i < Cart.length; i++) {
+        if (Cart[i] === cart_item) {
+            Cart.splice(i, 1);
+        }
+    }
     updateCart();
 }
 
 function initialiseCart() {
     //Фукнція віпрацьвуватиме при завантаженні сторінки
     //Тут можна наприклад, зчитати вміст корзини який збережено в Local Storage то показати його
-    //TODO: ...
-
-    updateCart();
+    if (localStorage.getItem('htmlCart') != null) {
+        Cart = JSON.parse(localStorage.getItem('htmlCart'));
+        updateCart();
+    }
 }
 
 function getPizzaInCart() {
@@ -51,31 +65,41 @@ function getPizzaInCart() {
 }
 
 function updateCart() {
-    //Функція викликається при зміні вмісту кошика
-    //Тут можна наприклад показати оновлений кошик на екрані та зберегти вміт кошика в Local Storage
-
-    //Очищаємо старі піци в кошику
     $cart.html("");
-
     //Онволення однієї піци
-    function showOnePizzaInCart(cart_item) {
-        var html_code = Templates.PizzaCart_OneItem(cart_item);
-
-        var $node = $(html_code);
-
-        $node.find(".plus").click(function(){
-            //Збільшуємо кількість замовлених піц
-            cart_item.quantity += 1;
-
-            //Оновлюємо відображення
-            updateCart();
-        });
-
-        $cart.append($node);
+    var sumOrder = 0;
+    allQuantity = 0;
+    for (var i = 0; i < Cart.length; i++) {
+        showOnePizzaInCart(Cart[i]);
+        sumOrder += Cart[i].quantity * Cart[i].price;
+        allQuantity += Cart[i].quantity;
     }
+    $(htmlAllQuantity).text(allQuantity);
+    $(sumForOrder).text(sumOrder);
+    localStorage.setItem('htmlCart', JSON.stringify(Cart));
+}
 
-    Cart.forEach(showOnePizzaInCart);
+function showOnePizzaInCart(cart_item) {
+    var html_code = Templates.PizzaCart_OneItem(cart_item);
+    var $node = $(html_code);
+    if (cart_item.size === PizzaSize.Big) $node.find((".name")).text(cart_item.pizza.title + " (Велика)");
+    $(sumForAll).text(cart_item.price * cart_item.quantity);
+    $node.find(".plus").click(function () {
+        //Збільшуємо кількість замовлених піц
+        cart_item.quantity += 1;
+        updateCart();
+    });
+    $node.find(".minus").click(function () {
+        cart_item.quantity -= 1;
+        if (cart_item.quantity === 0) removeFromCart(cart_item);
+        updateCart();
+    });
+    $node.find(".cross").click(function () {
+        removeFromCart(cart_item);
+        updateCart();
+    });
 
+    $cart.append($node);
 }
 
 exports.removeFromCart = removeFromCart;

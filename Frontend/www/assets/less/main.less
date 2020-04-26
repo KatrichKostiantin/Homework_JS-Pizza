@@ -1,9 +1,9 @@
 @mainColorText: #ee6a00;
 
 @import "pizza/pizza-card";
-@import "badge";
-@import "header";
-@import "basket";
+@import "stuct/badge";
+@import "stuct/header";
+@import "stuct/basket";
 
 .container {
     display: block;
@@ -21,11 +21,11 @@
     top: 0;
     right: 0;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.6);
+    padding: 40px 20px 20px;
 }
 
-#pizza_list {
+#pizza_container {
     width: 75%;
-    
     height: auto;
     padding-right: 0px;
 }
@@ -39,28 +39,30 @@
 
 .amount {
     margin-left: 5px;
-    padding-left: 7px;
-    padding-right: 7px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px 7px;
     border-radius: 100%;
     background: #EA862E;
     font-size: 12px;
     color: white;
 }
 
-.all_types {
+.activeFilter{
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
+#all_types {
     width: 80%;
-    max-width: 530px;
+    max-width: 600px;
     margin: 0 auto;
 }
 
-.all_types .btn {
+#all_types .btn {
     color: #EA862E;
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.all_types .btns {
+#all_types .btns {
     margin-bottom: 20px;
 }

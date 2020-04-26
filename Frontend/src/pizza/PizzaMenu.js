@@ -1,28 +1,28 @@
-/**
- * Created by chaika on 02.02.16.
- */
 var Templates = require('../Templates');
 var PizzaCart = require('./PizzaCart');
 var Pizza_List = require('../Pizza_List');
 
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
+var allType = $("#all_types");
+var countFilter = $('#countFilter');
 
 function showPizzaList(list) {
     //Очищаємо старі піци в кошику
     $pizza_list.html("");
 
     //Онволення однієї піци
+    countFilter.text(list.length);
     function showOnePizza(pizza) {
         var html_code = Templates.PizzaMenu_OneItem({pizza: pizza});
 
         var $node = $(html_code);
 
-        $node.find(".buy-big").click(function(){
-            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Big);
+        $node.find(".buy-big").click(function () {
+            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Big, pizza.big_size.price);
         });
-        $node.find(".buy-small").click(function(){
-            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Small);
+        $node.find(".buy-small").click(function () {
+            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Small, pizza.small_size.price);
         });
 
         $pizza_list.append($node);
@@ -31,15 +31,23 @@ function showPizzaList(list) {
     list.forEach(showOnePizza);
 }
 
+allType.find('#all').addClass('activeFilter');
+allType.find(".btn").click(function () {
+    $(this).parent().find('.activeFilter').removeClass('activeFilter');
+    $(this).addClass('activeFilter');
+    filterPizza($(this).text());
+});
+
 function filterPizza(filter) {
     //Масив куди потраплять піци які треба показати
     var pizza_shown = [];
 
-    Pizza_List.forEach(function(pizza){
-        //Якщо піка відповідає фільтру
-        //pizza_shown.push(pizza);
-
-        //TODO: зробити фільтри
+    if (filter === 'Усі') {
+        showPizzaList(Pizza_List);
+        return;
+    }
+    Pizza_List.forEach(function (pizza) {
+        if (pizza.type.includes(filter)) pizza_shown.push(pizza);
     });
 
     //Показати відфільтровані піци
@@ -48,6 +56,7 @@ function filterPizza(filter) {
 
 function initialiseMenu() {
     //Показуємо усі піци
+
     showPizzaList(Pizza_List)
 }
 

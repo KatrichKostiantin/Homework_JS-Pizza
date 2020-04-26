@@ -1,12 +1,9 @@
-/**
- * Created by diana on 12.01.16.
- */
 
 var pizza_info = [
     {
         id:1,
         icon:'assets/images/pizza_7.jpg',
-        title: "Імпреза",
+        title: "Імпрез",
         type: 'М’ясна піца',
         content: {
             meat: ['балик', 'салямі'],
@@ -139,7 +136,7 @@ var pizza_info = [
         id:90,
         icon:'assets/images/pizza_8.jpg',
         title: "Дольче Маре",
-        type: 'Морська піца',
+        type: 'З морепродуктами піцца',
         content: {
             ocean: ['криветки тигрові', 'мідії', 'ікра червона', 'філе червоної риби'],
             cheese: ['сир моцарелла'],
@@ -155,7 +152,7 @@ var pizza_info = [
         id:6,
         icon:'assets/images/pizza_4.jpg',
         title: "Россо Густо",
-        type: 'Морська піца',
+        type: 'З морепродуктами піцца',
         content: {
             ocean: ['ікра червона', 'лосось копчений'],
             cheese: ['сир моцарелла'],
