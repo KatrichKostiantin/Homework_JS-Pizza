@@ -35,7 +35,7 @@ var namePlaceholder = $('#namePlaceholder');
 var telPlaceholder = $('#telPlaceholder');
 var addressPlaceholder = $('#addressPlaceholder');
 
-$('#sendOrder').click(function () {
+$('#next').click(function () {
     var flag = true;
     if (namePlaceholder.val() === '') {
         $(namePlaceholder).parent().find('.alert').text("Ви нічого не ввели");
@@ -83,16 +83,42 @@ $('#sendOrder').click(function () {
     }
     if (flag) {
         $("#clear").click();
+
+        var order = {
+            version: 3,
+            public_key: "LIQPAY_PUBLIC_KEY",
+            action: "pay",
+            amount: 568.00,
+            currency: "UAH",
+            description: "Опис транзакції",
+            order_id: Math.random(),
+            sandbox: 1
+        };
+        var dataLiqPay = base64(JSON.stringify(order));
+
         var data = {
             name: namePlaceholder.val(),
             tel: telPlaceholder.val(),
-            address: addressPlaceholder.val()
+            address: addressPlaceholder.val(),
+            orderLiqPay: dataLiqPay
         };
         postRequest("/api/create-order/", data, function (req, res) {
+            res.body;
             document.location.href = "/";
         })
     }
 });
+
+function base64(str) {
+    return new Buffer(str).toString('base64');
+}
+
+var crypto = require('crypto');
+function sha1(string) {
+    var sha1 = crypto.createHash('sha1');
+    sha1.update(string);
+    return sha1.digest('base64');
+}
 
 allType.find('#all').addClass('activeFilter');
 allType.find(".btn").click(function () {
