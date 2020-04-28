@@ -1,7 +1,6 @@
 var Templates = require('../Templates');
 var PizzaCart = require('./PizzaCart');
-var Pizza_List = require('../Pizza_List');
-
+var Pizza_List;
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
 var allType = $("#all_types");
@@ -42,7 +41,7 @@ $('#sendOrder').click(function () {
         $(namePlaceholder).parent().find('.alert').text("Ви нічого не ввели");
         $(namePlaceholder).addClass('alert_input');
         flag = false;
-    } else if(namePlaceholder.val().toString().split(' ').length !== 2){
+    } else if (namePlaceholder.val().toString().split(' ').length !== 2) {
         $(namePlaceholder).addClass('alert_input');
         $(namePlaceholder).parent().find('.alert').text("Ви не ввели фамілію чи ім'я");
         flag = false;
@@ -51,18 +50,20 @@ $('#sendOrder').click(function () {
         $(namePlaceholder).parent().find('.alert').text("");
     }
 
-    String.prototype.isNumber = function(){return /^\d+$/.test(this);}
+    String.prototype.isNumber = function () {
+        return /^\d+$/.test(this);
+    }
     /*---Telephone---*/
     if (telPlaceholder.val() === '') {
         $(telPlaceholder).parent().find('.alert').text("Ви нічого не ввели ");
         $(telPlaceholder).addClass('alert_input');
         flag = false;
-    } else if(!telPlaceholder.val().toString().startsWith("380") &&
-        !telPlaceholder.val().toString().startsWith("0")){
+    } else if (!telPlaceholder.val().toString().startsWith("380") &&
+        !telPlaceholder.val().toString().startsWith("0")) {
         $(telPlaceholder).parent().find('.alert').text("Введіть номер телефону у форматі 380 або почніть з 0");
         $(telPlaceholder).addClass('alert_input');
         flag = false;
-    } else if(!telPlaceholder.val().toString().isNumber()){
+    } else if (!telPlaceholder.val().toString().isNumber()) {
         $(telPlaceholder).parent().find('.alert').text("Ви ввели не тількт цифри");
         $(telPlaceholder).addClass('alert_input');
         flag = false;
@@ -80,9 +81,16 @@ $('#sendOrder').click(function () {
         $(addressPlaceholder).removeClass('alert_input');
         $(addressPlaceholder).parent().find('.alert').text("");
     }
-    if(flag){
-        alert("ok");
+    if (flag) {
         $("#clear").click();
+        var data = {
+            name: namePlaceholder.val(),
+            tel: telPlaceholder.val(),
+            address: addressPlaceholder.val()
+        };
+        postRequest("/api/create-order/", data, function (req, res) {
+            document.location.href = "/";
+        })
     }
 });
 
@@ -111,8 +119,40 @@ function filterPizza(filter) {
 
 function initialiseMenu() {
     //Показуємо усі піци
+    getRequest("/api/get-pizza-list/", function (req, res) {
+        Pizza_List = res;
+        showPizzaList(Pizza_List)
+        console.log("Pizza_List is definition");
+    });
+}
 
-    showPizzaList(Pizza_List)
+
+function getRequest(url, callback) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            callback(null, data);
+        },
+        fail: function () {
+            callback(new Error("Ajax Failed"));
+        }
+    })
+}
+
+function postRequest(url, data, callback) {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            callback(null, data);
+        },
+        fail: function () {
+            callback(new Error("Ajax Failed"));
+        }
+    })
 }
 
 exports.filterPizza = filterPizza;
