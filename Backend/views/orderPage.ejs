@@ -1,0 +1,42 @@
+<% include common/header.ejs %>
+
+<div class="col-xs-12 col-sm-9 col-md-6" id="container_order">
+     <div id="basket">
+            <span id="text">Замовлення</span><span class="amount" id="allQuantity">0</span>
+            <a href="#" class="btn" id="clear">Очистити замовлення</a>
+            <div id="cart" class="order_btn">
+            </div>
+            <div class="end">
+                <p id="total-cost-name">Сума замовлення</p>
+                <p id="total-cost"> 0 грн</p>
+                <a href="/" class="btn" id="createOrder">Редагувати</a>
+            </div>
+        </div>
+    <font class="row font_order" style="font-size: 30px; font-weight: bold;">
+        1. Контактні дані
+    </font>
+    <div class="row">
+        <font class="font_order">Ім'я</font>
+        <input id="namePlaceholder" type="text" placeholder="Ім'я Фамілія" class="inputText">
+        <br>
+        <font class="alert"></font>
+    </div>
+    <br>
+    <div class="row">
+        <font class="font_order">Телефон</font>
+        <input id="telPlaceholder" type="text" placeholder="3805553535" class="inputText">
+        <br>
+        <font class="alert"></font>
+    </div>
+    <br>
+    <div class="row">
+        <font class="font_order">Адреса</font>
+        <input type="text" id="addressPlaceholder" placeholder="Київ, вул. Спаська, 2" class="inputText">
+        <br>
+        <font class="alert"></font>
+    </div>
+    <br>
+    <a href="#" class="btn" id="sendOrder">Відправити</a>
+</div>
+
+<% include common/footer.ejs %>

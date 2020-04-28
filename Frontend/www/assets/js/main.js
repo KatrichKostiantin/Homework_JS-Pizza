@@ -4,7 +4,7 @@ var pizza_info = [
     {
         id:1,
         icon:'assets/images/pizza_7.jpg',
-        title: "Імпрез",
+        title: "Імпреза",
         type: 'М’ясна піца',
         content: {
             meat: ['балик', 'салямі'],
@@ -137,7 +137,7 @@ var pizza_info = [
         id:90,
         icon:'assets/images/pizza_8.jpg',
         title: "Дольче Маре",
-        type: 'З морепродуктами піцца',
+        type: 'Морська піца',
         content: {
             ocean: ['криветки тигрові', 'мідії', 'ікра червона', 'філе червоної риби'],
             cheese: ['сир моцарелла'],
@@ -153,7 +153,7 @@ var pizza_info = [
         id:6,
         icon:'assets/images/pizza_4.jpg',
         title: "Россо Густо",
-        type: 'З морепродуктами піцца',
+        type: 'Морська піца',
         content: {
             ocean: ['ікра червона', 'лосось копчений'],
             cheese: ['сир моцарелла'],
@@ -195,10 +195,12 @@ $(function(){
     PizzaMenu.initialiseMenu();
 });
 },{"./Pizza_List":1,"./pizza/PizzaCart":4,"./pizza/PizzaMenu":5}],4:[function(require,module,exports){
+
 var Templates = require('../Templates');
 var sumForAll = $("#sumForAll");
 var sumForOrder = $("#total-cost");
 var htmlAllQuantity = $("#allQuantity");
+var createOrder = $("#createOrder");
 var allQuantity = 0;
 //Перелік розмірів піци
 var PizzaSize = {
@@ -322,6 +324,7 @@ function showPizzaList(list) {
 
     //Онволення однієї піци
     countFilter.text(list.length);
+
     function showOnePizza(pizza) {
         var html_code = Templates.PizzaMenu_OneItem({pizza: pizza});
 
@@ -339,6 +342,60 @@ function showPizzaList(list) {
 
     list.forEach(showOnePizza);
 }
+
+var namePlaceholder = $('#namePlaceholder');
+var telPlaceholder = $('#telPlaceholder');
+var addressPlaceholder = $('#addressPlaceholder');
+
+$('#sendOrder').click(function () {
+    var flag = true;
+    if (namePlaceholder.val() === '') {
+        $(namePlaceholder).parent().find('.alert').text("Ви нічого не ввели");
+        $(namePlaceholder).addClass('alert_input');
+        flag = false;
+    } else if(namePlaceholder.val().toString().split(' ').length !== 2){
+        $(namePlaceholder).addClass('alert_input');
+        $(namePlaceholder).parent().find('.alert').text("Ви не ввели фамілію чи ім'я");
+        flag = false;
+    } else {
+        $(namePlaceholder).removeClass('alert_input');
+        $(namePlaceholder).parent().find('.alert').text("");
+    }
+
+    String.prototype.isNumber = function(){return /^\d+$/.test(this);}
+    /*---Telephone---*/
+    if (telPlaceholder.val() === '') {
+        $(telPlaceholder).parent().find('.alert').text("Ви нічого не ввели ");
+        $(telPlaceholder).addClass('alert_input');
+        flag = false;
+    } else if(!telPlaceholder.val().toString().startsWith("380") &&
+        !telPlaceholder.val().toString().startsWith("0")){
+        $(telPlaceholder).parent().find('.alert').text("Введіть номер телефону у форматі 380 або почніть з 0");
+        $(telPlaceholder).addClass('alert_input');
+        flag = false;
+    } else if(!telPlaceholder.val().toString().isNumber()){
+        $(telPlaceholder).parent().find('.alert').text("Ви ввели не тількт цифри");
+        $(telPlaceholder).addClass('alert_input');
+        flag = false;
+    } else {
+        $(telPlaceholder).removeClass('alert_input');
+        $(telPlaceholder).parent().find('.alert').text("");
+    }
+
+    /*---Address---*/
+    if (addressPlaceholder.val() === '') {
+        $(addressPlaceholder).parent().find('.alert').text("Ви нічого не ввели");
+        $(addressPlaceholder).addClass('alert_input');
+        flag = false;
+    } else {
+        $(addressPlaceholder).removeClass('alert_input');
+        $(addressPlaceholder).parent().find('.alert').text("");
+    }
+    if(flag){
+        alert("ok");
+        $("#clear").click();
+    }
+});
 
 allType.find('#all').addClass('activeFilter');
 allType.find(".btn").click(function () {

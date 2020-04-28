@@ -1,7 +1,9 @@
+
 var Templates = require('../Templates');
 var sumForAll = $("#sumForAll");
 var sumForOrder = $("#total-cost");
 var htmlAllQuantity = $("#allQuantity");
+var createOrder = $("#createOrder");
 var allQuantity = 0;
 //Перелік розмірів піци
 var PizzaSize = {

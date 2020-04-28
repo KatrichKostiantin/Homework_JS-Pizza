@@ -1,9 +1,10 @@
-@mainColorText: #ee6a00;
+@mainColorText: #EA862E;
 
 @import "pizza/pizza-card";
 @import "stuct/badge";
 @import "stuct/header";
 @import "stuct/basket";
+@import "order";
 
 .container {
     display: block;
@@ -24,6 +25,12 @@
     padding: 40px 20px 20px;
 }
 
+.order_btn{
+    .btn{
+        display:none;
+    }
+}
+
 #pizza_container {
     width: 75%;
     height: auto;
@@ -41,7 +48,7 @@
     margin-left: 5px;
     padding: 5px 7px;
     border-radius: 100%;
-    background: #EA862E;
+    background: @mainColorText;
     font-size: 12px;
     color: white;
 }
@@ -58,7 +65,7 @@
 }
 
 #all_types .btn {
-    color: #EA862E;
+    color: @mainColorText;
     padding-left: 10px;
     padding-right: 10px;
 }
