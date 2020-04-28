@@ -9,14 +9,30 @@ exports.PizzaMenu_OneItem = ejs.compile("<%\r\nfunction getIngredientsArray(pizz
 exports.PizzaCart_OneItem = ejs.compile("<div class=\"product\">\r\n    <span class=\"name\"><%= pizza.title %></span>\r\n        <br>\r\n    <img src=\"assets/images/size-icon.svg\"> <span class=\"size\"><%= pizza[size].size %></span>\r\n    <img src=\"assets/images/weight.svg\"> <span class=\"weight\"><%= pizza[size].weight %></span>\r\n    <div class=\"buy\">\r\n        <p id=\"sumOrder\">Ціна: <%= pizza[size].price %> грн.</p>\r\n        <a href=\"#\" class=\"btn btn-danger minus\">-</a>\r\n        <%= quantity %>\r\n        <a href=\"#\" class=\"btn btn-success plus\">+</a>\r\n        <a href=\"#\" class=\"btn btn-default cross\">x</a>\r\n    </div>\r\n</div>");
 
 },{"ejs":6}],2:[function(require,module,exports){
-
-$(function(){
+$(function () {
     //This code will execute when the page is ready
     var PizzaMenu = require('./pizza/PizzaMenu');
     var PizzaCart = require('./pizza/PizzaCart');
     PizzaCart.initialiseCart();
     PizzaMenu.initialiseMenu();
+    initialize();
+    //Коли сторінка завантажилась
+    google.maps.event.addDomListener(window, 'load', initialize);
 });
+
+function initialize() {
+//Тут починаємо працювати з картою
+    var mapProp = {
+        center: new google.maps.LatLng(50.464379, 30.519131),
+        zoom: 11
+    };
+    var html_element = document.getElementById("googleMap");
+    var map = new google.maps.Map(html_element, mapProp);
+//Карта створена і показана
+}
+
+
+
 },{"./pizza/PizzaCart":3,"./pizza/PizzaMenu":4}],3:[function(require,module,exports){
 
 var Templates = require('../Templates');
@@ -254,7 +270,6 @@ function filterPizza(filter) {
 function initialiseMenu() {
     //Показуємо усі піци
     getRequest("/api/get-pizza-list/", function (req, res) {
-        alert(JSON.stringify(res));
         Pizza_List = res;
         showPizzaList(Pizza_List)
         console.log("Pizza_List is definition");
