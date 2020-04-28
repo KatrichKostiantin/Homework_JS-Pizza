@@ -5,6 +5,7 @@ var Pizza_List;
 var $pizza_list = $("#pizza_list");
 var allType = $("#all_types");
 var countFilter = $('#countFilter');
+var sumForOrder = $("#total-cost");
 
 function showPizzaList(list) {
     //Очищаємо старі піци в кошику
@@ -82,42 +83,41 @@ $('#next').click(function () {
         $(addressPlaceholder).parent().find('.alert').text("");
     }
     if (flag) {
+
+        var description = PizzaCart.createDescription(
+            namePlaceholder.val(),
+            telPlaceholder.val(),
+            addressPlaceholder.val());
+
+        sendLiqPayToServer(sumForOrder.text(), description);
         $("#clear").click();
-
-        var order = {
-            version: 3,
-            public_key: "LIQPAY_PUBLIC_KEY",
-            action: "pay",
-            amount: 568.00,
-            currency: "UAH",
-            description: "Опис транзакції",
-            order_id: Math.random(),
-            sandbox: 1
-        };
-        var dataLiqPay = base64(JSON.stringify(order));
-
-        var data = {
-            name: namePlaceholder.val(),
-            tel: telPlaceholder.val(),
-            address: addressPlaceholder.val(),
-            orderLiqPay: dataLiqPay
-        };
-        postRequest("/api/create-order/", data, function (req, res) {
-            res.body;
-            document.location.href = "/";
-        })
     }
 });
 
-function base64(str) {
-    return new Buffer(str).toString('base64');
-}
+function sendLiqPayToServer(amount, description) {
+    var info = {
+        amount: amount,
+        description: description
+    };
 
-var crypto = require('crypto');
-function sha1(string) {
-    var sha1 = crypto.createHash('sha1');
-    sha1.update(string);
-    return sha1.digest('base64');
+    postRequest("/api/create-order/", info,
+        function (req, res) {
+        alert(res.toString());
+        LiqPayCheckout.init({
+            data: res.data,
+            signature: res.signature,
+            embedTo: "#liqpay",
+            mode: "popup"	//	embed	||	popup
+        }).on("liqpay.callback", function (data) {
+            console.log(data.status);
+            console.log(data);
+        }).on("liqpay.ready", function (data) {
+            //	ready
+        }).on("liqpay.close", function (data) {
+            //	close
+        });
+        //document.location.href = "/";
+    })
 }
 
 allType.find('#all').addClass('activeFilter');

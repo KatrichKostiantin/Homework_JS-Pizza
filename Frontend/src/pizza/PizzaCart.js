@@ -81,6 +81,18 @@ function updateCart() {
     localStorage.setItem('htmlCart', JSON.stringify(Cart));
 }
 
+function createDescription(name, tel, address) {
+    var text =
+        "Замовлення піци: " + name + "\n" +
+        "Адреса доставки: " + address + "\n" +
+        "Телефон: " + tel + "\n" +
+        "Замовлення:\n";
+    for (var i = 0; i < Cart.length; i++) {
+        text += "- " + Cart[i].quantity + "шт. [" + (Cart[i].size === 'big_size' ? 'Велика' : 'Маленька') + "] " + Cart[i].pizza.title + "\n";
+    }
+    return text;
+}
+
 function showOnePizzaInCart(cart_item) {
     var html_code = Templates.PizzaCart_OneItem(cart_item);
     var $node = $(html_code);
@@ -109,5 +121,6 @@ exports.addToCart = addToCart;
 
 exports.getPizzaInCart = getPizzaInCart;
 exports.initialiseCart = initialiseCart;
+exports.createDescription = createDescription;
 
 exports.PizzaSize = PizzaSize;
